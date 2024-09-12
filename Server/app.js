@@ -34,6 +34,12 @@ io.on("connection", (socket) => {
   socket.emit("welcome", socket.id);
 });
 
+io.on("disconnect", (socket) => {
+  console.log("a user disconnected".red.bgWhite);
+  console.log(socket.id.bgBlue.white);
+  socket.emit("bye", socket.id);
+});
+
 server.listen(port, () => {
   console.log(`listening on ${port}`.green.bgYellow.bold);
 });
