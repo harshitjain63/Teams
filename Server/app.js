@@ -31,7 +31,7 @@ const port = process.env.PORT || 3000;
 io.on("connection", (socket) => {
   console.log("a user connected".green.bgWhite);
   console.log(socket.id.bgBlue.white);
-  socket.emit("welcome", socket.id);
+  socket.emit("welcome", `Welcome ${socket.id}`);
 });
 
 io.on("disconnect", (socket) => {
