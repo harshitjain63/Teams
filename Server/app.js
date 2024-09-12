@@ -32,12 +32,12 @@ io.on("connection", (socket) => {
   console.log("a user connected".green.bgWhite);
   console.log(socket.id.bgBlue.white);
   socket.emit("welcome", `Welcome ${socket.id}`);
-});
-
-io.on("disconnect", (socket) => {
-  console.log("a user disconnected".red.bgWhite);
-  console.log(socket.id.bgBlue.white);
-  socket.emit("bye", socket.id);
+  io.on("disconnect", (socket) => {
+    console.log("a user disconnected".red.bgWhite);
+    console.log(socket.id.bgBlue.white);
+    socket.emit("bye", socket.id);
+    socket.disconnect();
+  });
 });
 
 server.listen(port, () => {
