@@ -39,14 +39,13 @@ io.on("connection", (socket) => {
     users.set(socket.id, username);
     console.log(`${username} joined room ${room}`.green);
     const roomSockets = io.sockets.adapter.rooms.get(room) || new Set();
-    const roomUsers = Array.from(roomSockets).map((socketId) =>
-      users.get(socketId)
-    );
 
-    // current list of usernames to the newly joined user
+    const roomUsers = Array.from(roomSockets)
+      .map((socketId) => users.get(socketId))
+      .filter(Boolean);
+
     io.to(socket.id).emit("current-users", roomUsers);
 
-    // Notify everyone in the room that a new user has joined
     io.to(room).emit("user-joined", `${username} has joined the room`);
   });
 
