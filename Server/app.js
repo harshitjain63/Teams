@@ -41,7 +41,6 @@ io.on("connection", (socket) => {
   io.on("disconnect", (socket) => {
     console.log("a user disconnected".red.bgWhite);
     console.log(socket.id.bgBlue.white);
-    socket.disconnect();
   });
 });
 
