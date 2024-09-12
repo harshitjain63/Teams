@@ -26,7 +26,7 @@ app.get("/", (req, res) => {
   console.log("Hello From Team Server".green.bgWhite);
 });
 
-const port = 3000;
+const port = process.env.PORT || 3000;
 
 io.on("connection", (socket) => {
   console.log("a user connected".green.bgWhite);
