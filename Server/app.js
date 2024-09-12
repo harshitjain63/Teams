@@ -31,14 +31,44 @@ const port = process.env.PORT || 3000;
 io.on("connection", (socket) => {
   console.log("a user connected".green.bgWhite);
   console.log(socket.id.bgBlue.white);
+
   socket.emit("welcome", `Welcome ${socket.id}`);
 
-  socket.on("message", (msg) => {
-    console.log(msg);
-    socket.broadcast.emit("message", msg);
+  socket.on("join-room", (room, username) => {
+    socket.join(room);
+    console.log(`${username} joined room ${room}`.green);
+
+    // Notify everyone in the room that a new user has joined
+    io.to(room).emit("user-joined", `${username} has joined the room`);
+
+    // send the current room members to the user
+    const roomUsers = [...(io.sockets.adapter.rooms.get(room) || [])];
+    io.to(socket.id).emit("current-users", roomUsers);
   });
 
-  io.on("disconnect", (socket) => {
+  socket.on("leave-room", (room, username) => {
+    socket.leave(room);
+    console.log(`${username} left room ${room}`.yellow);
+
+    // Notify everyone in the room that a user has left
+    io.to(room).emit("user-left", `${username} has left the room`);
+  });
+
+  // Handling user messages
+  socket.on("message", (msg) => {
+    console.log(`Message from ${msg.username}: ${msg.text}`.bgMagenta.white);
+
+    // Broadcast the message to everyone in the room
+    io.to(msg.room).emit("message", msg);
+  });
+
+  // Handle disconnect events
+  socket.on("disconnecting", () => {
+    console.log("disconnecting".red.bgWhite);
+    console.log(socket.id.bgBlue.white);
+  });
+
+  socket.on("disconnect", () => {
     console.log("a user disconnected".red.bgWhite);
     console.log(socket.id.bgBlue.white);
   });
