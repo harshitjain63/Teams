@@ -10,7 +10,7 @@ interface Message {
 }
 
 interface RoomEvent {
-  text: string;
+  text: string | RoomEvent;
 }
 
 const socket: Socket = io('https://teams-iauq.onrender.com/'); // Your server URL
@@ -19,7 +19,6 @@ const Home: React.FC = () => {
   const [message, setMessage] = useState<string>('');
   const [messages, setMessages] = useState<Message[]>([]);
   const [room, setRoom] = useState<string>('');
-  const [finalRoom, setFinalRoom] = useState<string>('');
   const [username, setUsername] = useState<string>('User1');
   const [roomUsers, setRoomUsers] = useState<string[]>([]);
 
@@ -124,7 +123,9 @@ const Home: React.FC = () => {
             renderItem={({item}) => (
               <View style={styles.render}>
                 <Text style={styles.messageText}>
-                  {item.username ? `${item.username}: ${item.text}` : item.text}
+                  {item.username
+                    ? `${item.username}: ${item.text.toString()}`
+                    : item.text.toString()}
                 </Text>
               </View>
             )}
