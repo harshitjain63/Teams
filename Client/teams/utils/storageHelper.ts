@@ -1,5 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {Message} from '../models/bookScehma';
+import {Message} from '../models/messageSchema';
 
 // Saving the room list to AsyncStorage
 export const saveRoomsToStorage = async (rooms: string[]) => {
