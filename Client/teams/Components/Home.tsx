@@ -1,19 +1,16 @@
 import React, {useState, useEffect} from 'react';
 import {Text, TextInput, Button, Card, Title} from 'react-native-paper';
-import {FlatList, View, StyleSheet, ScrollView} from 'react-native';
+import {FlatList, View, StyleSheet, ScrollView, Alert} from 'react-native';
 import io, {Socket} from 'socket.io-client';
+import {
+  saveRoomsToStorage,
+  loadRoomsFromStorage,
+  saveMessagesForRoom,
+  loadMessagesForRoom,
+} from '../utils/storageHelper';
+import {Message} from '../models/messageSchema';
 
-interface Message {
-  room?: string;
-  username: string;
-  text: string | RoomEvent;
-}
-
-interface RoomEvent {
-  text: string;
-}
-
-const socket: Socket = io('https://teams-iauq.onrender.com/'); // Your server URL
+const socket: Socket = io('https://teams-iauq.onrender.com/');
 
 const Home: React.FC = () => {
   const [message, setMessage] = useState<string>('');
@@ -21,60 +18,90 @@ const Home: React.FC = () => {
   const [room, setRoom] = useState<string>('');
   const [username, setUsername] = useState<string>('User1');
   const [roomUsers, setRoomUsers] = useState<string[]>([]);
+  const [rooms, setRooms] = useState<string[]>([]);
+  const [joined, setJoined] = useState<boolean>(false);
 
   useEffect(() => {
-    // Handle incoming messages
+    const initializeRooms = async () => {
+      const storedRooms = await loadRoomsFromStorage();
+      setRooms(storedRooms);
+    };
+
+    initializeRooms();
+
     socket.on('message', (msg: Message) => {
-      setMessages(prevMessages => [...prevMessages, msg]);
+      setMessages(prevMessages => {
+        const updatedMessages = [...prevMessages, msg];
+        saveMessagesForRoom(room, updatedMessages);
+        return updatedMessages;
+      });
     });
 
-    // Handle notifications when a user joins
-    socket.on('user-joined', (msg: RoomEvent) => {
-      setMessages(prevMessages => [...prevMessages, {username: '', text: msg}]);
+    socket.on('user-joined', (msg: string) => {
+      setMessages(prevMessages => {
+        const updatedMessages = [...prevMessages, {username: '', text: msg}];
+        // saveMessagesForRoom(room, updatedMessages);
+        return updatedMessages;
+      });
     });
 
-    // Handle notifications when a user leaves
-    socket.on('user-left', (msg: RoomEvent) => {
-      setMessages(prevMessages => [
-        ...prevMessages,
-        {username: '', text: msg.text},
-      ]);
+    socket.on('user-left', (msg: string) => {
+      setMessages(prevMessages => {
+        const updatedMessages = [...prevMessages, {username: '', text: msg}];
+        socket.off('message');
+        return updatedMessages;
+      });
     });
 
-    // Handle current users in the room
     socket.on('current-users', (users: string[]) => {
       setRoomUsers(users);
     });
 
-    // Clean up the event listeners on component unmount
-    // return () => {
-    //     socket.off('message');
-    //     socket.off('user-joined');
-    //     socket.off('user-left');
-    //     socket.off('current-users');
-    // };
-  }, []);
+    return () => {
+      socket.off('message');
+      socket.off('user-joined');
+      socket.off('user-left');
+      socket.off('current-users');
+    };
+  }, [room]);
 
-  // Join a room
-  const joinRoom = () => {
+  const joinRoom = async () => {
     if (room) {
       socket.emit('join-room', room, username);
+      setJoined(true);
+      if (!rooms.includes(room)) {
+        const updatedRooms = [...rooms, room];
+        setRooms(updatedRooms);
+        await saveRoomsToStorage(updatedRooms);
+      }
+
+      const roomMessages = await loadMessagesForRoom(room);
+      setMessages(roomMessages);
     }
   };
 
-  // Leave a room
   const leaveRoom = () => {
     if (room) {
       socket.emit('leave-room', room, username);
+      setJoined(false);
+      socket.off('message');
+      setRoom('');
     }
   };
 
-  // Send a message to the room
   const sendMessage = () => {
-    if (message) {
+    if (message && joined) {
+      // Ensure the user is joined to a room
       const msg: Message = {room, username, text: message};
       socket.emit('message', msg);
+      setMessages(prevMessages => {
+        const updatedMessages = [...prevMessages, msg];
+        saveMessagesForRoom(room, updatedMessages);
+        return updatedMessages;
+      });
       setMessage('');
+    } else {
+      Alert.alert('You need to join a room to send a message.');
     }
   };
 
@@ -96,12 +123,15 @@ const Home: React.FC = () => {
           onChangeText={setUsername}
         />
         <View style={styles.buttonContainer}>
-          <Button mode="contained" onPress={joinRoom} style={styles.button}>
-            Join Room
-          </Button>
-          <Button mode="contained" onPress={leaveRoom} style={styles.button}>
-            Leave Room
-          </Button>
+          {joined ? (
+            <Button mode="contained" onPress={leaveRoom} style={styles.button}>
+              Leave Room
+            </Button>
+          ) : (
+            <Button mode="contained" onPress={joinRoom} style={styles.button}>
+              Join Room
+            </Button>
+          )}
         </View>
         <TextInput
           style={styles.input}
@@ -114,6 +144,19 @@ const Home: React.FC = () => {
           Send Message
         </Button>
       </View>
+
+      <Card style={styles.card}>
+        <Card.Content>
+          <Title>Previously Used Rooms</Title>
+          {rooms.map((roomName, index) => (
+            <Button
+              key={index}
+              onPress={() => loadMessagesForRoom(roomName).then(setMessages)}>
+              {roomName}
+            </Button>
+          ))}
+        </Card.Content>
+      </Card>
 
       <Card style={styles.card}>
         <Card.Content>
@@ -138,10 +181,8 @@ const Home: React.FC = () => {
         <Card.Content>
           <Title>Current Users in Room:</Title>
           {roomUsers.map((user, index) => (
-            <View style={styles.render}>
-              <Text key={index} style={styles.userText}>
-                {user}
-              </Text>
+            <View style={styles.render} key={index}>
+              <Text style={styles.userText}>{user}</Text>
             </View>
           ))}
         </Card.Content>
