@@ -10,7 +10,7 @@ interface Message {
 }
 
 interface RoomEvent {
-  text: string | RoomEvent;
+  text: string;
 }
 
 const socket: Socket = io('https://teams-iauq.onrender.com/'); // Your server URL
