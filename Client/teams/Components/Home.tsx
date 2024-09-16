@@ -16,7 +16,7 @@ const Home: React.FC = () => {
   const [message, setMessage] = useState<string>('');
   const [messages, setMessages] = useState<Message[]>([]);
   const [room, setRoom] = useState<string>('');
-  const [username, setUsername] = useState<string>('User1');
+  const [username, setUsername] = useState<string>('');
   const [roomUsers, setRoomUsers] = useState<string[]>([]);
   const [rooms, setRooms] = useState<string[]>([]);
   const [joined, setJoined] = useState<boolean>(false);
@@ -40,15 +40,14 @@ const Home: React.FC = () => {
     socket.on('user-joined', (msg: string) => {
       setMessages(prevMessages => {
         const updatedMessages = [...prevMessages, {username: '', text: msg}];
-        // saveMessagesForRoom(room, updatedMessages);
         return updatedMessages;
       });
     });
 
     socket.on('user-left', (msg: string) => {
+      console.log(msg);
       setMessages(prevMessages => {
         const updatedMessages = [...prevMessages, {username: '', text: msg}];
-        socket.off('message');
         return updatedMessages;
       });
     });
@@ -65,17 +64,19 @@ const Home: React.FC = () => {
     };
   }, [room]);
 
-  const joinRoom = async () => {
-    if (room) {
-      socket.emit('join-room', room, username);
+  const joinRoom = async (roomName?: string) => {
+    const targetRoom = roomName || room; // Use the roomName if provided
+    if (targetRoom) {
+      socket.emit('join-room', targetRoom, username);
       setJoined(true);
-      if (!rooms.includes(room)) {
-        const updatedRooms = [...rooms, room];
+      setRoom(targetRoom); // Update the room state with the target room
+      if (!rooms.includes(targetRoom)) {
+        const updatedRooms = [...rooms, targetRoom];
         setRooms(updatedRooms);
         await saveRoomsToStorage(updatedRooms);
       }
 
-      const roomMessages = await loadMessagesForRoom(room);
+      const roomMessages = await loadMessagesForRoom(targetRoom);
       setMessages(roomMessages);
     }
   };
@@ -84,14 +85,14 @@ const Home: React.FC = () => {
     if (room) {
       socket.emit('leave-room', room, username);
       setJoined(false);
-      socket.off('message');
       setRoom('');
+      setMessages([]);
+      setRoomUsers([]);
     }
   };
 
   const sendMessage = () => {
     if (message && joined) {
-      // Ensure the user is joined to a room
       const msg: Message = {room, username, text: message};
       socket.emit('message', msg);
       setMessages(prevMessages => {
@@ -103,6 +104,11 @@ const Home: React.FC = () => {
     } else {
       Alert.alert('You need to join a room to send a message.');
     }
+  };
+
+  const handlePreviousRoomPress = (roomName: string) => {
+    setRoom(roomName);
+    joinRoom(roomName);
   };
 
   return (
@@ -128,7 +134,10 @@ const Home: React.FC = () => {
               Leave Room
             </Button>
           ) : (
-            <Button mode="contained" onPress={joinRoom} style={styles.button}>
+            <Button
+              mode="contained"
+              onPress={() => joinRoom()}
+              style={styles.button}>
               Join Room
             </Button>
           )}
@@ -140,7 +149,12 @@ const Home: React.FC = () => {
           value={message}
           onChangeText={setMessage}
         />
-        <Button mode="contained" onPress={sendMessage} style={styles.button}>
+        <Button
+          mode="contained"
+          onPress={sendMessage}
+          style={styles.button}
+          disabled={!joined} // Disable send button if not joined
+        >
           Send Message
         </Button>
       </View>
@@ -151,7 +165,7 @@ const Home: React.FC = () => {
           {rooms.map((roomName, index) => (
             <Button
               key={index}
-              onPress={() => loadMessagesForRoom(roomName).then(setMessages)}>
+              onPress={() => handlePreviousRoomPress(roomName)}>
               {roomName}
             </Button>
           ))}
