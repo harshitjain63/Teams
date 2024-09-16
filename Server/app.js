@@ -56,14 +56,31 @@ io.on("connection", (socket) => {
 
     // Notify everyone in the room that the user has left
     io.to(room).emit("user-left", `${username} has left the room`);
+
+    // Update the list of current users in the room
+    const roomSockets = io.sockets.adapter.rooms.get(room) || new Set();
+    const roomUsers = Array.from(roomSockets)
+      .map((socketId) => users.get(socketId))
+      .filter(Boolean);
+
+    io.to(room).emit("current-users", roomUsers);
   });
 
   // Handling user messages
   socket.on("message", (msg) => {
-    console.log(`Message from ${msg.username}: ${msg.text}`.bgMagenta.white);
+    // Check if the user is in the room
+    const roomSockets = io.sockets.adapter.rooms.get(msg.room) || new Set();
+    const isInRoom = roomSockets.has(socket.id);
 
-    // Broadcast the message to everyone in the room
-    io.to(msg.room).emit("message", msg);
+    if (isInRoom) {
+      console.log(`Message from ${msg.username}: ${msg.text}`.bgMagenta.white);
+      // Broadcast the message to everyone in the room
+      io.to(msg.room).emit("message", msg);
+    } else {
+      console.log(
+        `User ${msg.username} attempted to send a message to a room they are not in.`
+      );
+    }
   });
 
   // Handle disconnect events
