@@ -51,7 +51,7 @@ io.on("connection", (socket) => {
 
   socket.on("leave-room", (room, username) => {
     socket.leave(room);
-
+    console.log(`${username} left room ${room}`.red);
     users.delete(socket.id);
 
     // Notify everyone in the room that the user has left
