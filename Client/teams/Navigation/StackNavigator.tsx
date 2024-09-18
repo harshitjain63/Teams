@@ -23,7 +23,11 @@ const StackNavigator = () => {
           component={TeamsSplashscreen}
         />
         <stack.Screen name="Home" component={Home} />
-        <stack.Screen name="testing" component={Testing} />
+        <stack.Screen
+          options={{headerShown: false}}
+          name="testing"
+          component={Testing}
+        />
       </stack.Navigator>
     </NavigationContainer>
   );

@@ -2,7 +2,13 @@ import {ImageSourcePropType} from 'react-native';
 
 type ImageProp = {
   chaticon: ImageSourcePropType;
+  goofleicon: ImageSourcePropType;
+  facebookicon: ImageSourcePropType;
+  twittericon: ImageSourcePropType;
 };
 export const Images: ImageProp = {
   chaticon: require('../assets/chaticon.png'),
+  goofleicon: require('../assets/search.png'),
+  facebookicon: require('../assets/facebook.png'),
+  twittericon: require('../assets/twitter.png'),
 };
