@@ -20,7 +20,6 @@ export type RootStackParams = {
   Search_Modal: {
     setReciever_Id: Dispatch<SetStateAction<string>>;
   };
-
 };
 
 const stack = createNativeStackNavigator<RootStackParams>();
@@ -28,7 +27,6 @@ const stack = createNativeStackNavigator<RootStackParams>();
 const StackNavigator = () => {
   return (
     <NavigationContainer>
-
       <Provider store={store}>
         <StatusBar translucent={true} backgroundColor={'transparent'} />
         <stack.Navigator
@@ -38,13 +36,12 @@ const StackNavigator = () => {
             headerTitleAlign: 'center',
             animation: 'slide_from_right',
           }}>
-          
           <stack.Screen
-          options={{headerShown: false}}
-          name="Splash"
-          component={TeamsSplashscreen}
-        />
-          
+            options={{headerShown: false}}
+            name="Splash"
+            component={TeamsSplashscreen}
+          />
+
           <stack.Screen
             name="Home"
             component={Home}
@@ -55,15 +52,15 @@ const StackNavigator = () => {
             }}
           />
           <stack.Screen
-          options={{headerShown: false}}
-          name="Login"
-          component={Login}
-        />
-        <stack.Screen
-          options={{headerShown: false}}
-          name="Register"
-          component={Register}
-        />
+            options={{headerShown: false}}
+            name="Login"
+            component={Login}
+          />
+          <stack.Screen
+            options={{headerShown: false}}
+            name="Register"
+            component={Register}
+          />
           <stack.Screen
             name="MeetingScreen"
             component={MeetingScreen}
