@@ -5,6 +5,8 @@ import Home from '../Screens/Home';
 import MeetingScreen from '../Screens/MeetingScreen';
 import CustomModal from '../Components/MeetingScreen/Modal';
 import {StatusBar} from 'react-native';
+import {Provider} from 'react-redux';
+import {store} from '../redux/store';
 
 export type RootStackParams = {
   Home: undefined;
@@ -19,40 +21,42 @@ const stack = createNativeStackNavigator<RootStackParams>();
 const StackNavigator = () => {
   return (
     <NavigationContainer>
-      <StatusBar translucent={true} backgroundColor={'transparent'} />
-      <stack.Navigator
-        screenOptions={{
-          headerTintColor: 'white',
-          headerStyle: {backgroundColor: '#4c2fdc'},
-          headerTitleAlign: 'center',
-          animation: 'slide_from_right',
-        }}>
-        <stack.Screen
-          name="Home"
-          component={Home}
-          options={{
-            title: 'Meetings',
+      <Provider store={store}>
+        <StatusBar translucent={true} backgroundColor={'transparent'} />
+        <stack.Navigator
+          screenOptions={{
+            headerTintColor: 'white',
+            headerStyle: {backgroundColor: '#4c2fdc'},
+            headerTitleAlign: 'center',
+            animation: 'slide_from_right',
+          }}>
+          <stack.Screen
+            name="Home"
+            component={Home}
+            options={{
+              title: 'Meetings',
 
-            headerBackVisible: false,
-          }}
-        />
-        <stack.Screen
-          name="MeetingScreen"
-          component={MeetingScreen}
-          options={{
-            title: 'New Meeting',
-          }}
-        />
-        <stack.Screen
-          name="Search_Modal"
-          component={CustomModal}
-          options={{
-            presentation: 'containedTransparentModal',
-            headerShown: false,
-            animation: 'slide_from_bottom',
-          }}
-        />
-      </stack.Navigator>
+              headerBackVisible: false,
+            }}
+          />
+          <stack.Screen
+            name="MeetingScreen"
+            component={MeetingScreen}
+            options={{
+              title: 'New Meeting',
+            }}
+          />
+          <stack.Screen
+            name="Search_Modal"
+            component={CustomModal}
+            options={{
+              presentation: 'containedTransparentModal',
+              headerShown: false,
+              animation: 'slide_from_bottom',
+            }}
+          />
+        </stack.Navigator>
+      </Provider>
     </NavigationContainer>
   );
 };
