@@ -9,7 +9,6 @@ import {
   loadMessagesForRoom,
 } from '../utils/storageHelper';
 import {Message} from '../models/messageSchema';
-import ChatView from './ChatView';
 
 const socket: Socket = io('https://teams-iauq.onrender.com/');
 
@@ -115,7 +114,6 @@ const Home: React.FC = () => {
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <View style={styles.inputContainer}>
-        <ChatView />
         <TextInput
           style={styles.input}
           mode="outlined"
