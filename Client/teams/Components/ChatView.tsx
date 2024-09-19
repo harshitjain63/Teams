@@ -3,9 +3,13 @@ import React from 'react';
 import {Images} from '../constants/Image';
 import LinearGradient from 'react-native-linear-gradient';
 
-const ChatView = () => {
+const ChatView = ({message, id}: {message: string; id: number}) => {
   return (
-    <View style={styles.container}>
+    <View
+      style={[
+        styles.container,
+        {flexDirection: id === 2 ? 'row' : 'row-reverse'},
+      ]}>
       <LinearGradient
         colors={['#00FFFF', '#8A2BE2']}
         style={styles.gradientProfile}>
@@ -15,10 +19,16 @@ const ChatView = () => {
       </LinearGradient>
 
       <LinearGradient
-        colors={['#00FFFF', '#8A2BE2']}
+        colors={id === 2 ? ['#FFF', '#FFF'] : ['#00FFFF', '#8A2BE2']}
         style={styles.gradientMessage}>
         <View style={styles.messageContainer}>
-          <Text style={styles.msg_text}>Message Aya Hai Bhai</Text>
+          <Text
+            style={[
+              styles.msg_text,
+              {color: id === 2 ? 'rgba(0,0,0,0.7)' : 'white'},
+            ]}>
+            {message}
+          </Text>
         </View>
       </LinearGradient>
       <Text style={styles.time_text}>12:33</Text>
@@ -28,7 +38,6 @@ const ChatView = () => {
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: 'row-reverse',
     marginVertical: 10,
     gap: 8,
   },

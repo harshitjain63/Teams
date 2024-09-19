@@ -10,6 +10,7 @@ import CustomModal from '../Components/MeetingScreen/Modal';
 import {StatusBar} from 'react-native';
 import {Provider} from 'react-redux';
 import {store} from '../redux/store';
+import ChatScreen from '../Screens/ChatScreen';
 
 export type RootStackParams = {
   Home: undefined;
@@ -19,6 +20,7 @@ export type RootStackParams = {
   };
   Register: undefined;
   Login: undefined;
+  Chat: undefined;
   Search_Modal: undefined;
 };
 
@@ -43,10 +45,14 @@ const StackNavigator = () => {
           />
           <stack.Screen
             options={{headerShown: false}}
+            name="Chat"
+            component={ChatScreen}
+          />
+          <stack.Screen
+            options={{headerShown: false}}
             name="Register"
             component={Register}
           />
-
           <stack.Screen
             name="Home"
             component={Home}
@@ -61,11 +67,6 @@ const StackNavigator = () => {
             name="Login"
             component={Login}
           />
-          {/* <stack.Screen
-            options={{headerShown: false}}
-            name="Register"
-            component={Register}
-          /> */}
           <stack.Screen
             name="MeetingScreen"
             component={MeetingScreen}
