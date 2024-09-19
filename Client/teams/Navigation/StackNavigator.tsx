@@ -1,4 +1,4 @@
-import React, {Dispatch, SetStateAction} from 'react';
+import React from 'react';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {NavigationContainer} from '@react-navigation/native';
 import TeamsSplashscreen from '../Screens/TeamsSplashscreen';
@@ -14,12 +14,12 @@ import {store} from '../redux/store';
 export type RootStackParams = {
   Home: undefined;
   Splash: undefined;
-  MeetingScreen: undefined;
+  MeetingScreen: {
+    reciever_Id: string;
+  };
   Register: undefined;
   Login: undefined;
-  Search_Modal: {
-    setReciever_Id: Dispatch<SetStateAction<string>>;
-  };
+  Search_Modal: undefined;
 };
 
 const stack = createNativeStackNavigator<RootStackParams>();
@@ -41,6 +41,11 @@ const StackNavigator = () => {
             name="Splash"
             component={TeamsSplashscreen}
           />
+          <stack.Screen
+            options={{headerShown: false}}
+            name="Register"
+            component={Register}
+          />
 
           <stack.Screen
             name="Home"
@@ -56,11 +61,11 @@ const StackNavigator = () => {
             name="Login"
             component={Login}
           />
-          <stack.Screen
+          {/* <stack.Screen
             options={{headerShown: false}}
             name="Register"
             component={Register}
-          />
+          /> */}
           <stack.Screen
             name="MeetingScreen"
             component={MeetingScreen}

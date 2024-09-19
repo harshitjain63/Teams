@@ -45,9 +45,7 @@ const itemData: item[] = [
   },
 ];
 
-const Modal = ({navigation, route}: SearchProps) => {
-  const {setReciever_Id} = route.params;
-
+const Modal = ({navigation}: SearchProps) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [data, setData] = useState<item[]>(itemData);
 
@@ -68,8 +66,7 @@ const Modal = ({navigation, route}: SearchProps) => {
   }, [data, debounceSearchQuery]);
 
   const handleItemOnPress = ({id}: {id: string}) => {
-    setReciever_Id(id);
-    navigation.goBack();
+    navigation.navigate('MeetingScreen', {reciever_Id: id});
   };
 
   const renderItem = ({item}: {item: item}) => {

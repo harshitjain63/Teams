@@ -1,5 +1,5 @@
 import {View, StyleSheet} from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {AnimatedFAB, Button} from 'react-native-paper';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {RootStackParams} from '../Navigation/StackNavigator';
@@ -10,17 +10,19 @@ export type MeetingProps = NativeStackScreenProps<
   'MeetingScreen'
 >;
 
-const MeetingScreen = ({navigation}: MeetingProps) => {
+const MeetingScreen = ({navigation, route}: MeetingProps) => {
   const [reciever_Id, setReciever_Id] = useState('');
-
+  useEffect(() => {
+    if (route.params?.reciever_Id) {
+      setReciever_Id(route.params.reciever_Id);
+    }
+  }, [route.params?.reciever_Id]);
   const handleFabClick = () => {
     showModal();
   };
 
   const showModal = () => {
-    navigation.navigate('Search_Modal', {
-      setReciever_Id,
-    });
+    navigation.navigate('Search_Modal');
   };
   return (
     <View style={styles.container}>
