@@ -1,14 +1,14 @@
+/* eslint-disable react/react-in-jsx-scope */
 import {View, StyleSheet, ScrollView} from 'react-native';
-import React from 'react';
 import RegisterHeader from '../Components/registration/RegisterHeader';
-import FormLogin from '../Components/login/FormLogin';
+import Form from '../Components/registration/Form';
 
-const Login = () => {
+const Register = () => {
   return (
     <ScrollView contentContainerStyle={styles.scrollViewContainer}>
       <View style={styles.container}>
         <RegisterHeader />
-        <FormLogin />
+        <Form />
       </View>
     </ScrollView>
   );
@@ -24,4 +24,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Login;
+export default Register;
