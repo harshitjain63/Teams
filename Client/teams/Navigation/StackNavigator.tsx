@@ -1,4 +1,4 @@
-import React, {Dispatch, SetStateAction} from 'react';
+import React from 'react';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {NavigationContainer} from '@react-navigation/native';
 import TeamsSplashscreen from '../Screens/TeamsSplashscreen';
@@ -15,13 +15,13 @@ import ChatScreen from '../Screens/ChatScreen';
 export type RootStackParams = {
   Home: undefined;
   Splash: undefined;
-  MeetingScreen: undefined;
+  MeetingScreen: {
+    reciever_Id: string;
+  };
   Register: undefined;
   Login: undefined;
   Chat: undefined;
-  Search_Modal: {
-    setReciever_Id: Dispatch<SetStateAction<string>>;
-  };
+  Search_Modal: undefined;
 };
 
 const stack = createNativeStackNavigator<RootStackParams>();
@@ -40,6 +40,11 @@ const StackNavigator = () => {
           }}>
           <stack.Screen
             options={{headerShown: false}}
+            name="Splash"
+            component={TeamsSplashscreen}
+          />
+          <stack.Screen
+            options={{headerShown: false}}
             name="Chat"
             component={ChatScreen}
           />
@@ -48,12 +53,6 @@ const StackNavigator = () => {
             name="Register"
             component={Register}
           />
-          <stack.Screen
-            options={{headerShown: false}}
-            name="Splash"
-            component={TeamsSplashscreen}
-          />
-
           <stack.Screen
             name="Home"
             component={Home}
@@ -68,7 +67,6 @@ const StackNavigator = () => {
             name="Login"
             component={Login}
           />
-
           <stack.Screen
             name="MeetingScreen"
             component={MeetingScreen}

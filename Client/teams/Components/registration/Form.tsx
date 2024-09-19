@@ -1,9 +1,9 @@
 import {View, StyleSheet} from 'react-native';
 import React, {useState} from 'react';
 import {TextInput} from 'react-native-paper';
-import axios from 'axios';
 import LoginIcons from '../LoginIcons';
 import Buttons from '../Button';
+import axiosInstance from '../../middleware/axiosConfig/axiosConfig';
 
 const Form = () => {
   const [email, setEmail] = useState<string>('');
@@ -17,15 +17,12 @@ const Form = () => {
 
   const postApiData = async () => {
     try {
-      const data = await axios.post(
-        'https://o1kjqrzwxh.sharedwithexpose.com/api/auth/register',
-        {
-          name: name,
-          email: email,
-          password: password,
-          designation: 'Tech',
-        },
-      );
+      const data = await axiosInstance.post('/auth/register', {
+        name: name,
+        email: email,
+        password: password,
+        designation: 'Tech',
+      });
       console.log(data.data);
     } catch (error) {
       console.error(error);
@@ -81,13 +78,6 @@ const Form = () => {
 };
 
 const styles = StyleSheet.create({
-  scrollViewContainer: {
-    flexGrow: 1,
-  },
-  container: {
-    flex: 1,
-    backgroundColor: '#FFF',
-  },
   formContainer: {
     padding: 20,
     marginTop: 20,

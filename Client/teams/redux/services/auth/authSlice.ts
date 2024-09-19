@@ -1,28 +1,25 @@
 import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit';
 import {setAuthToken} from '../../../middleware/axiosConfig/axiosConfig';
 
-import {User} from '../../../constants/type';
+import {Token} from '../../../constants/type';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 type AuthState = {
-  user: null | User;
+  loginDetails: null | Token;
   loading: boolean;
   error: string | null;
 };
 
 const initialState: AuthState = {
-  user: null,
+  loginDetails: null,
   loading: false,
   error: null,
 };
 
-export const fetchUser = createAsyncThunk('auth/fetchUser', async () => {
+export const fetchToken = createAsyncThunk('auth/fetchToken', async () => {
   try {
-    const response = await AsyncStorage.getItem('user');
-    if (response) {
-      const data = await JSON.parse(response);
-      return data;
-    }
+    const response = await AsyncStorage.getItem('token');
+    return response;
   } catch (error) {
     return error;
   }
@@ -32,28 +29,31 @@ const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    setUser: (state: AuthState, action: PayloadAction<User>) => {
-      state.user = action.payload;
+    setLoginDetails: (state: AuthState, action: PayloadAction<string>) => {
+      if (state.loginDetails) {
+        state.loginDetails.token = action.payload;
+      }
     },
-
     setToken: (state: AuthState, action: PayloadAction<string>) => {
       setAuthToken(action.payload);
     },
     clearToken: (state: AuthState) => {
-      if (state.user) {
-        state.user.token = null;
+      if (state.loginDetails) {
+        state.loginDetails.token = null;
       }
       setAuthToken(null);
     },
   },
   extraReducers: builder => {
-    builder.addCase(fetchUser.pending, state => {
+    builder.addCase(fetchToken.pending, state => {
       state.loading = true;
     });
-    builder.addCase(fetchUser.fulfilled, (state, action) => {
-      state.user = action.payload;
+    builder.addCase(fetchToken.fulfilled, (state, action) => {
+      if (state.loginDetails) {
+        state.loginDetails.token = action.payload as string | null;
+      }
     });
-    builder.addCase(fetchUser.rejected, (state, action) => {
+    builder.addCase(fetchToken.rejected, (state, action) => {
       state.error = action.error.message as string;
     });
   },
