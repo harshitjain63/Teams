@@ -16,9 +16,11 @@ import Profile from '../Screens/Profile';
 export type RootStackParams = {
   Home: undefined;
   Splash: undefined;
-  MeetingScreen: {
-    reciever_Id: string;
-  };
+  MeetingScreen:
+    | undefined
+    | {
+        reciever_Id: string;
+      };
   Register: undefined;
   Login: undefined;
   Chat: undefined;
