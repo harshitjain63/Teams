@@ -5,13 +5,15 @@ import {Token} from '../../../constants/type';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 type AuthState = {
-  loginDetails: null | Token;
+  loginDetails: Token;
   loading: boolean;
   error: string | null;
 };
 
 const initialState: AuthState = {
-  loginDetails: null,
+  loginDetails: {
+    token: '',
+  },
   loading: false,
   error: null,
 };
@@ -19,6 +21,7 @@ const initialState: AuthState = {
 export const fetchToken = createAsyncThunk('auth/fetchToken', async () => {
   try {
     const response = await AsyncStorage.getItem('token');
+    console.log('response', response);
     return response;
   } catch (error) {
     return error;
@@ -50,8 +53,10 @@ const authSlice = createSlice({
     });
     builder.addCase(fetchToken.fulfilled, (state, action) => {
       if (state.loginDetails) {
+        console.log('..........', action.payload);
         state.loginDetails.token = action.payload as string | null;
         setAuthToken(action.payload as string);
+        state.loading = false;
       }
     });
     builder.addCase(fetchToken.rejected, (state, action) => {

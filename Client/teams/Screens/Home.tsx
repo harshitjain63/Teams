@@ -1,11 +1,12 @@
-import React from 'react';
+import React, {useCallback} from 'react';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {RootStackParams} from '../Navigation/StackNavigator';
 import Header from '../Components/Home/Header';
 import SearchBar from '../Components/Home/SearchBar';
 import Rooms from '../Components/Home/Rooms';
 import useDebounce from '../hooks/useDebounce';
-import {View} from 'react-native';
+import {Alert, BackHandler, View} from 'react-native';
+import {useFocusEffect} from '@react-navigation/native';
 // import {loadRoomsFromStorage} from '../utils/storageHelper';
 export type HomeProps = NativeStackScreenProps<RootStackParams, 'Home'>;
 
@@ -34,6 +35,33 @@ const roomsData = [
 ];
 
 const Home = ({navigation, route}: HomeProps) => {
+  const backAction = useCallback(() => {
+    if (route.name === 'Home') {
+      Alert.alert('Hold on!', 'Are you sure you want to go back?', [
+        {
+          text: 'Cancel',
+          onPress: () => null,
+          style: 'cancel',
+        },
+        {text: 'YES', onPress: () => BackHandler.exitApp()},
+      ]);
+      return true;
+    } else {
+      return false;
+    }
+  }, [route.name]);
+
+  useFocusEffect(
+    useCallback(() => {
+      BackHandler.addEventListener('hardwareBackPress', backAction);
+
+      return () => {
+        BackHandler.removeEventListener('hardwareBackPress', backAction);
+      };
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [route.name]),
+  );
+
   // const [rooms, setRooms] = React.useState<Room[]>(roomsData);
   const [searchQuery, setSearchQuery] = React.useState('');
 

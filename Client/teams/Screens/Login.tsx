@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useCallback, useEffect} from 'react';
 import {
   View,
   StyleSheet,
@@ -7,15 +7,45 @@ import {
   Animated,
   Keyboard,
   Dimensions,
+  Alert,
+  BackHandler,
 } from 'react-native';
 import RegisterHeader from '../Components/registration/RegisterHeader';
 import FormLogin from '../Components/login/FormLogin';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {RootStackParams} from '../Navigation/StackNavigator';
+import {useFocusEffect} from '@react-navigation/native';
 
 export type LoginProps = NativeStackScreenProps<RootStackParams, 'Login'>;
 
 const Login = ({navigation, route}: LoginProps) => {
+  const backAction = useCallback(() => {
+    if (route.name === 'Login') {
+      Alert.alert('Hold on!', 'Are you sure you want to go back?', [
+        {
+          text: 'Cancel',
+          onPress: () => null,
+          style: 'cancel',
+        },
+        {text: 'YES', onPress: () => BackHandler.exitApp()},
+      ]);
+      return true;
+    } else {
+      return false;
+    }
+  }, [route.name]);
+
+  useFocusEffect(
+    useCallback(() => {
+      BackHandler.addEventListener('hardwareBackPress', backAction);
+
+      return () => {
+        BackHandler.removeEventListener('hardwareBackPress', backAction);
+      };
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [route.name]),
+  );
+
   const {height} = Dimensions.get('window');
 
   const headerHeight = React.useMemo(

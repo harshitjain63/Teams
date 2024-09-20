@@ -8,6 +8,7 @@ import {Alert} from 'react-native';
 import {useAppDispatch} from '../../redux/hooks/customHook';
 import {setToken} from '../../redux/services/auth/authSlice';
 import axiosInstance from '../../middleware/axiosConfig/axiosConfig';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const FormLogin = ({navigation}: LoginProps) => {
   const [email, setEmail] = useState<string>('');
@@ -35,6 +36,7 @@ const FormLogin = ({navigation}: LoginProps) => {
       if (data.data) {
         console.log(data.data);
         dispatch(setToken(data.data.token));
+        await AsyncStorage.setItem('token', data.data.token);
         Alert.alert('Login', 'User Logged In successfully', [
           {text: 'OK', onPress: onPressHandler},
         ]);
