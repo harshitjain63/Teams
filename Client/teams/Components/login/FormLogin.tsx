@@ -52,6 +52,7 @@ const FormLogin = ({navigation}: LoginProps) => {
         value={email}
         onChangeText={setEmail}
         mode="outlined"
+        autoComplete="email"
         outlineColor={'blue'}
         activeOutlineColor="blue"
         style={styles.input}
@@ -62,6 +63,7 @@ const FormLogin = ({navigation}: LoginProps) => {
         value={password}
         onChangeText={setPassword}
         mode="outlined"
+        autoComplete="password"
         outlineColor={'blue'}
         activeOutlineColor="blue"
         style={styles.input}

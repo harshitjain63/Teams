@@ -22,7 +22,7 @@ const Profile = ({navigation, route}: ProfileProps) => {
       <ProfileHeader />
       {loading && <ActivityIndicator size={'large'} color="blue" />}
       {error && <Text style={styles.error}>{error}</Text>}
-      {userDetails && (
+      {userDetails.email.length > 0 && (
         <ProfileForm
           userDetails={userDetails}
           navigation={navigation}

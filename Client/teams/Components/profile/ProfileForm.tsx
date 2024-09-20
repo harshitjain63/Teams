@@ -6,6 +6,8 @@ import {useAppDispatch} from '../../redux/hooks/customHook';
 import {clearToken} from '../../redux/services/auth/authSlice';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {ProfileProps} from '../../Screens/Profile';
+import axiosInstance from '../../middleware/axiosConfig/axiosConfig';
+import {logout} from '../../redux/services/userSlice';
 
 type User = {
   userDetails: {
@@ -22,9 +24,17 @@ const ProfileForm = ({userDetails, navigation}: Props) => {
   const dispatch = useAppDispatch();
 
   const handleLogout = async () => {
-    dispatch(clearToken());
-    await AsyncStorage.removeItem('token');
-    navigation.navigate('Login');
+    try {
+      const response = await axiosInstance.get('/user/logout');
+      if (response.data) {
+        dispatch(clearToken());
+        dispatch(logout());
+        await AsyncStorage.removeItem('token');
+        navigation.navigate('Login');
+      }
+    } catch (error) {
+      console.log((error as any).message);
+    }
   };
   const {name, email, id, designation} = userDetails;
   console.log('>>><<<', userDetails.name);

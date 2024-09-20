@@ -15,7 +15,7 @@ const initialState: UserState = {
     email: '',
     designation: '',
   },
-  loading: false,
+  loading: true,
   error: null,
 };
 
@@ -32,7 +32,14 @@ export const fetchDetails = createAsyncThunk('user/fetchDetails', async () => {
 const userSlice = createSlice({
   name: 'user',
   initialState,
-  reducers: {},
+  reducers: {
+    logout: state => {
+      state.userDetails.email = '';
+      state.userDetails.designation = '';
+      state.userDetails.name = '';
+      state.userDetails.id = '';
+    },
+  },
   extraReducers: builder => {
     builder.addCase(fetchDetails.pending, state => {
       state.loading = true;
@@ -50,10 +57,10 @@ const userSlice = createSlice({
     });
     builder.addCase(fetchDetails.rejected, (state, action) => {
       state.error = action.error.message as string;
+      state.loading = false;
     });
   },
 });
 
-export const actions = userSlice.actions;
-
+export const {logout} = userSlice.actions;
 export default userSlice.reducer;

@@ -49,6 +49,7 @@ const Form = ({navigation}: RegisterProp) => {
         value={name}
         onChangeText={setName}
         mode="outlined"
+        autoComplete="name"
         outlineColor={'blue'}
         activeOutlineColor="blue"
         style={styles.input}
@@ -58,6 +59,7 @@ const Form = ({navigation}: RegisterProp) => {
         value={email}
         onChangeText={setEmail}
         mode="outlined"
+        autoComplete="email"
         outlineColor={'blue'}
         activeOutlineColor="blue"
         style={styles.input}
@@ -68,6 +70,7 @@ const Form = ({navigation}: RegisterProp) => {
         value={password}
         onChangeText={setPassword}
         mode="outlined"
+        autoComplete="password"
         outlineColor={'blue'}
         activeOutlineColor="blue"
         style={styles.input}
