@@ -10,8 +10,12 @@ import {
 } from 'react-native';
 import RegisterHeader from '../Components/registration/RegisterHeader';
 import Form from '../Components/registration/Form';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {RootStackParams} from '../Navigation/StackNavigator';
 
-const Register = () => {
+export type RegisterProp = NativeStackScreenProps<RootStackParams, 'Register'>;
+
+const Register = ({navigation, route}: RegisterProp) => {
   const {height} = Dimensions.get('window');
 
   const headerHeight = React.useMemo(
@@ -62,7 +66,7 @@ const Register = () => {
         <Animated.View style={{height: headerHeight}}>
           <RegisterHeader />
         </Animated.View>
-        <Form />
+        <Form navigation={navigation} route={route} />
       </KeyboardAvoidingView>
     </View>
   );

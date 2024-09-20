@@ -11,6 +11,7 @@ import {StatusBar} from 'react-native';
 import {Provider} from 'react-redux';
 import {store} from '../redux/store';
 import ChatScreen from '../Screens/ChatScreen';
+import Profile from '../Screens/Profile';
 
 export type RootStackParams = {
   Home: undefined;
@@ -22,6 +23,7 @@ export type RootStackParams = {
   Login: undefined;
   Chat: undefined;
   Search_Modal: undefined;
+  Profile: undefined;
 };
 
 const stack = createNativeStackNavigator<RootStackParams>();
@@ -42,6 +44,11 @@ const StackNavigator = () => {
             options={{headerShown: false}}
             name="Splash"
             component={TeamsSplashscreen}
+          />
+          <stack.Screen
+            options={{headerShown: true, headerBackVisible: true}}
+            name="Profile"
+            component={Profile}
           />
           <stack.Screen
             options={{headerShown: false}}

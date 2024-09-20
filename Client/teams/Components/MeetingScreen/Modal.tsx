@@ -6,13 +6,14 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useCallback, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {Icon} from 'react-native-paper';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {RootStackParams} from '../../Navigation/StackNavigator';
 import useDebounce from '../../hooks/useDebounce';
 // import axios from 'axios';
 import {FlatList} from 'react-native';
+import axiosInstance from '../../middleware/axiosConfig/axiosConfig';
 
 type SearchProps = NativeStackScreenProps<RootStackParams, 'Search_Modal'>;
 
@@ -20,36 +21,31 @@ type item = {
   id: string;
   name: string;
   email: string;
+  designation: string;
 };
-
-const itemData: item[] = [
-  {
-    id: 'sdhjagvhkbjkABFSJHbadjh',
-    name: 'Aarjav',
-    email: 'anshjain638@gmail.com',
-  },
-  {
-    id: 'sdhdbfhjagvhkbjkABFSJHbadjh',
-    name: 'Aarjav3',
-    email: 'anshjain638@gmail.com',
-  },
-  {
-    id: 'sdhjagvhkfdjsbbjkABFSJHbadjh',
-    name: 'Aarjav2',
-    email: 'anshjain638@gmail.com',
-  },
-  {
-    id: 'sdhjagvhkbjkABcdFSJHbadjh',
-    name: 'Aarjav1',
-    email: 'anshjain638@gmail.com',
-  },
-];
 
 const Modal = ({navigation}: SearchProps) => {
   const [searchQuery, setSearchQuery] = useState('');
-  const [data, setData] = useState<item[]>(itemData);
+  const [data, setData] = useState<item[]>([]);
 
   const debounceSearchQuery = useDebounce(searchQuery, 300);
+
+  const getUsersData = useCallback(async () => {
+    try {
+      const data = await axiosInstance.get(
+        `/user/search/${debounceSearchQuery}`,
+      );
+      setData(data.data.user);
+    } catch (error) {
+      console.log((error as any).message);
+    }
+  }, [debounceSearchQuery]);
+
+  useEffect(() => {
+    if (debounceSearchQuery.length > 0) {
+      getUsersData();
+    }
+  }, [debounceSearchQuery, getUsersData]);
 
   const filteredData = useCallback(() => {
     return data.filter(
@@ -75,9 +71,9 @@ const Modal = ({navigation}: SearchProps) => {
         key={item.id}
         style={styles.flatListItem}
         onPress={() => handleItemOnPress({id: item.id})}>
-        <Text>{item.id}</Text>
-        <Text>{item.email}</Text>
-        <Text>{item.name}</Text>
+        <Text style={styles.txt}>{item.id}</Text>
+        <Text style={styles.txt}>{item.email}</Text>
+        <Text style={styles.txt}>{item.name}</Text>
       </TouchableOpacity>
     );
   };
@@ -109,6 +105,9 @@ const Modal = ({navigation}: SearchProps) => {
 export default Modal;
 
 const styles = StyleSheet.create({
+  txt: {
+    color: 'black',
+  },
   container: {
     flex: 1,
     marginTop: '12%',

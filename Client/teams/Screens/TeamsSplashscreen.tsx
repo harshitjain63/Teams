@@ -11,7 +11,7 @@ type SplashProp = NativeStackScreenProps<RootStackParams, 'Splash'>;
 const TeamsSplashscreen = ({navigation}: SplashProp) => {
   useEffect(() => {
     setTimeout(() => {
-      navigation.navigate('Home');
+      navigation.navigate('Login');
     }, 3000);
   }, [navigation]);
 
