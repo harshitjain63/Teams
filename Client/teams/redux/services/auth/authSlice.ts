@@ -51,6 +51,7 @@ const authSlice = createSlice({
     builder.addCase(fetchToken.fulfilled, (state, action) => {
       if (state.loginDetails) {
         state.loginDetails.token = action.payload as string | null;
+        setAuthToken(action.payload as string);
       }
     });
     builder.addCase(fetchToken.rejected, (state, action) => {

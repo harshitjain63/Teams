@@ -6,6 +6,7 @@ type ImageProp = {
   facebookicon: ImageSourcePropType;
   twittericon: ImageSourcePropType;
   arrowicon: ImageSourcePropType;
+  profileicon: ImageSourcePropType;
 };
 export const Images: ImageProp = {
   chaticon: require('../assets/chaticon.png'),
@@ -13,4 +14,5 @@ export const Images: ImageProp = {
   facebookicon: require('../assets/facebook.png'),
   twittericon: require('../assets/twitter.png'),
   arrowicon: require('../assets/right-arrow.png'),
+  profileicon: require('../assets/boy.png'),
 };

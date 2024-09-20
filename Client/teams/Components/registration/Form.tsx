@@ -1,15 +1,24 @@
-import {View, StyleSheet} from 'react-native';
+import {View, StyleSheet, Text, Alert} from 'react-native';
 import React, {useState} from 'react';
 import {TextInput} from 'react-native-paper';
 import LoginIcons from '../LoginIcons';
 import Buttons from '../Button';
 import axiosInstance from '../../middleware/axiosConfig/axiosConfig';
+import {RegisterProp} from '../../Screens/Register';
 
-const Form = () => {
+const Form = ({navigation}: RegisterProp) => {
   const [email, setEmail] = useState<string>('');
   const [name, setName] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [passwordShown, setPasswordShown] = useState<boolean>(false);
+
+  const onPressHandler = () => {
+    setEmail('');
+    setName('');
+    setPassword('');
+    setPasswordShown(false);
+    navigation.navigate('Login');
+  };
 
   const togglePassword = () => {
     setPasswordShown(!passwordShown);
@@ -23,9 +32,13 @@ const Form = () => {
         password: password,
         designation: 'Tech',
       });
-      console.log(data.data);
+      if (data.data) {
+        Alert.alert('Registration', 'User Registered successfully', [
+          {text: 'OK', onPress: onPressHandler},
+        ]);
+      }
     } catch (error) {
-      console.error(error);
+      console.error((error as any).message);
     }
   };
 
@@ -73,23 +86,39 @@ const Form = () => {
         styles={styles.custom_button}
         onpress={postApiData}
       />
+      <Text style={styles.txt}>
+        Already Have an Account?{' '}
+        <Text onPress={() => navigation.navigate('Login')} style={styles.txt2}>
+          {' '}
+          Login
+        </Text>
+      </Text>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
+  txt: {
+    color: 'black',
+    textAlign: 'center',
+    alignSelf: 'center',
+    marginTop: '10%',
+  },
+  txt2: {
+    color: 'blue',
+  },
   formContainer: {
     padding: 20,
-    marginTop: 20,
+    marginTop: '5%',
     width: '100%',
   },
   input: {
-    marginBottom: 15,
+    marginBottom: '5%',
     width: '100%',
   },
   custom_button: {
     alignSelf: 'center',
-    marginTop: 20,
+    marginTop: '8%',
   },
 });
 

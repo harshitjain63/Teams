@@ -7,7 +7,7 @@ type Item = {
   id: number;
   name: string;
   title: string;
-  navigateTo: 'MeetingScreen' | 'Home';
+  navigateTo: 'MeetingScreen' | 'Home' | 'Profile';
 };
 
 const items: Item[] = [
@@ -32,8 +32,8 @@ const items: Item[] = [
   {
     id: 4,
     name: 'arrow-up',
-    title: 'Share Screen',
-    navigateTo: 'MeetingScreen',
+    title: 'Profile',
+    navigateTo: 'Profile',
   },
 ];
 

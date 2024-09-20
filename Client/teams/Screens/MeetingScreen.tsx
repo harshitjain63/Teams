@@ -27,7 +27,10 @@ const MeetingScreen = ({navigation, route}: MeetingProps) => {
   return (
     <View style={styles.container}>
       <TextInputWrapper reciever_id={reciever_Id} />
-      <Button style={styles.button} textColor="#FFF">
+      <Button
+        style={styles.button}
+        textColor="#FFF"
+        onPress={() => navigation.navigate('Chat')}>
         Start Meeting
       </Button>
       <AnimatedFAB

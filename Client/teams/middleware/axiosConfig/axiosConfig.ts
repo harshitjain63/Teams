@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const axiosInstance = axios.create({
-  baseURL: 'https://o1kjqrzwxh.sharedwithexpose.com/api',
+  baseURL: 'http://206.1.60.20/api',
   headers: {
     Accept: 'application/json',
   },

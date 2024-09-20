@@ -1,7 +1,8 @@
-import {View, StyleSheet, FlatList} from 'react-native';
+import {StyleSheet, FlatList} from 'react-native';
 import React, {useCallback, useState} from 'react';
 import SendMessage from '../Components/chatscreen/SendMessage';
 import ChatView from '../Components/ChatView';
+import {SafeAreaView} from 'react-native-safe-area-context';
 
 const itemdata: ItemData[] = [
   {
@@ -49,7 +50,7 @@ const ChatScreen = () => {
     return <ChatView message={item.message} id={item.id} />;
   }, []);
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       {itemdata.length !== 0 ? (
         <FlatList
           data={itemdata}
@@ -58,7 +59,7 @@ const ChatScreen = () => {
         />
       ) : null}
       <SendMessage setMessage={setMessage} />
-    </View>
+    </SafeAreaView>
   );
 };
 
