@@ -17,6 +17,7 @@
     "@realm/react": "^0.10.1",
     "@reduxjs/toolkit": "^2.2.7",
     "axios": "^1.7.7",
+    "pusher-js": "^8.4.0-rc2",
     "react": "18.3.1",
     "react-native": "0.75.3",
     "react-native-keyboard-aware-scroll-view": "^0.9.5",

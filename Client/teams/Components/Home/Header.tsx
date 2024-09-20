@@ -7,7 +7,7 @@ type Item = {
   id: number;
   name: string;
   title: string;
-  navigateTo: 'MeetingScreen' | 'Home' | 'Profile';
+  navigateTo: 'MeetingScreen' | 'Home' | 'Profile' | 'Testing';
 };
 
 const items: Item[] = [
@@ -27,7 +27,7 @@ const items: Item[] = [
     id: 3,
     name: 'calendar',
     title: 'Schedule',
-    navigateTo: 'MeetingScreen',
+    navigateTo: 'Testing',
   },
   {
     id: 4,
