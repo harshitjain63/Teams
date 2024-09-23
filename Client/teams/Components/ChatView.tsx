@@ -3,7 +3,15 @@ import React from 'react';
 import {Images} from '../constants/Image';
 import LinearGradient from 'react-native-linear-gradient';
 
-const ChatView = ({message, id}: {message: string; id: number}) => {
+const ChatView = ({
+  message,
+  id,
+  timestamp,
+}: {
+  message: string;
+  id: number;
+  timestamp?: string;
+}) => {
   return (
     <View
       style={[
@@ -31,7 +39,8 @@ const ChatView = ({message, id}: {message: string; id: number}) => {
           </Text>
         </View>
       </LinearGradient>
-      <Text style={styles.time_text}>12:33</Text>
+
+      {timestamp && <Text style={styles.time_text}>{timestamp}</Text>}
     </View>
   );
 };

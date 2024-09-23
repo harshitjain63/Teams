@@ -63,6 +63,7 @@ const Modal = ({navigation}: SearchProps) => {
 
   const handleItemOnPress = ({id}: {id: string}) => {
     navigation.navigate('MeetingScreen', {reciever_Id: id});
+    navigation.navigate('Chat', {reciever_Id: id});
   };
 
   const renderItem = ({item}: {item: item}) => {

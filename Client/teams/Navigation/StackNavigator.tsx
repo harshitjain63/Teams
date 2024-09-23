@@ -24,7 +24,11 @@ export type RootStackParams = {
       };
   Register: undefined;
   Login: undefined;
-  Chat: undefined;
+  Chat:
+    | undefined
+    | {
+        reciever_Id: string;
+      };
   Search_Modal: undefined;
   Profile: undefined;
   Testing: undefined;
