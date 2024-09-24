@@ -23,13 +23,7 @@ const TeamsSplashscreen = ({navigation}: SplashProp) => {
 
   useEffect(() => {
     setTimeout(() => {
-      if (!loading) {
-        if (loginDetails.token && loginDetails.token.length > 0) {
-          navigation.navigate('Home');
-        } else {
-          navigation.navigate('Login');
-        }
-      }
+      navigation.navigate('OnBoarding');
     }, 5000);
   }, [loading, loginDetails, navigation]);
 
