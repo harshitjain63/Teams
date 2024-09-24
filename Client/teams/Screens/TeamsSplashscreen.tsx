@@ -5,27 +5,15 @@ import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {RootStackParams} from '../Navigation/StackNavigator';
 import {Images} from '../constants/Image';
 import LinearGradient from 'react-native-linear-gradient';
-import {useAppDispatch, useAppSelector} from '../redux/hooks/customHook';
-import {fetchToken} from '../redux/services/auth/authSlice';
 
 type SplashProp = NativeStackScreenProps<RootStackParams, 'Splash'>;
 
 const TeamsSplashscreen = ({navigation}: SplashProp) => {
-  const dispatch = useAppDispatch();
-  const {loginDetails, loading} = useAppSelector(state => state.auth);
-
-  useEffect(() => {
-    dispatch(fetchToken());
-  }, [dispatch]);
-
-  console.log(''.length);
-  console.log('<<<>>>', loginDetails.token);
-
   useEffect(() => {
     setTimeout(() => {
       navigation.navigate('OnBoarding');
     }, 5000);
-  }, [loading, loginDetails, navigation]);
+  }, [navigation]);
 
   return (
     <LinearGradient colors={['#00FFFF', '#8A2BE2']} style={styles.gradient}>
