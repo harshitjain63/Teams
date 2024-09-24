@@ -10,7 +10,11 @@ import {setToken} from '../../redux/services/auth/authSlice';
 import axiosInstance from '../../middleware/axiosConfig/axiosConfig';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const FormLogin = ({navigation}: LoginProps) => {
+interface FormLoginProps extends LoginProps {
+  translations: any; // Define the type for translations
+}
+
+const FormLogin = ({navigation, translations}: FormLoginProps) => {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [passwordShown, setPasswordShown] = useState<boolean>(false);
@@ -48,7 +52,7 @@ const FormLogin = ({navigation}: LoginProps) => {
   return (
     <View style={styles.formContainer}>
       <TextInput
-        label={'Enter Your Email'}
+        label={translations.email_placeholder}
         value={email}
         onChangeText={setEmail}
         mode="outlined"
@@ -59,7 +63,7 @@ const FormLogin = ({navigation}: LoginProps) => {
       />
       <TextInput
         secureTextEntry={!passwordShown}
-        label={'Enter Your Password'}
+        label={translations.password_placeholder}
         value={password}
         onChangeText={setPassword}
         mode="outlined"
@@ -78,7 +82,7 @@ const FormLogin = ({navigation}: LoginProps) => {
 
       {/* Register Button */}
       <Buttons
-        txt={'Login'}
+        txt={translations.submit_button_text}
         styles={styles.custom_button}
         onpress={postApiData}
       />

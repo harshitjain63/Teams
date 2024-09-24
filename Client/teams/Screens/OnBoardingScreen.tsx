@@ -7,6 +7,7 @@ import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {RootStackParams} from '../Navigation/StackNavigator';
 import {useAppDispatch, useAppSelector} from '../redux/hooks/customHook';
 import {fetchToken} from '../redux/services/auth/authSlice';
+import {setLanguage} from '../redux/services/languageSlice';
 
 type OnboardingProp = NativeStackScreenProps<RootStackParams, 'OnBoarding'>;
 
@@ -15,11 +16,14 @@ const OnBoardingScreen = ({navigation}: OnboardingProp) => {
   const {loginDetails, loading} = useAppSelector(state => state.auth);
   const [move, setMove] = useState<boolean>(false);
 
+  const handleLanguageSelect = (lang: string) => {
+    dispatch(setLanguage(lang)); // Dispatch selected language
+    setMove(true);
+  };
+
   useEffect(() => {
     dispatch(fetchToken());
   }, [dispatch]);
-
-  console.log('token:', loginDetails.token);
 
   useEffect(() => {
     if (move) {
@@ -42,15 +46,17 @@ const OnBoardingScreen = ({navigation}: OnboardingProp) => {
           title="English"
           onPress={() => {
             setMove(true);
+            handleLanguageSelect('en');
           }}
           containerStyles={styles.customButtonStyles}
           textStyles={styles.text}
         />
 
         <MovingArrowButton
-          title="Hindi"
+          title="हिन्दी"
           onPress={() => {
             setMove(true);
+            handleLanguageSelect('hi');
           }}
           containerStyles={styles.customButtonStyles}
         />
