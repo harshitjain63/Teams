@@ -17,6 +17,10 @@ import {RootStackParams} from '../Navigation/StackNavigator';
 import {useFocusEffect} from '@react-navigation/native';
 import {useAppSelector} from '../redux/hooks/customHook';
 import {fetchTranslations} from '../Components/languages/api';
+import {
+  getTranslations,
+  insertTranslations,
+} from '../Components/database/Database';
 
 export type LoginProps = NativeStackScreenProps<RootStackParams, 'Login'>;
 
@@ -29,11 +33,21 @@ const Login = ({navigation, route}: LoginProps) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const data = await fetchTranslations('login', selectedLanguage);
-        if (data) {
-          setTranslations(data.texts);
+        const storedTranslations = await getTranslations(
+          'login',
+          selectedLanguage,
+        );
+        if (storedTranslations) {
+          setTranslations(storedTranslations);
+          console.log('Translations loaded from SQLite:', storedTranslations);
         } else {
-          console.warn('Translations not found for the selected language');
+          const data = await fetchTranslations('login', selectedLanguage);
+          if (data) {
+            setTranslations(data.texts);
+            await insertTranslations(data);
+          } else {
+            console.warn('Translations not found for the selected language');
+          }
         }
       } catch (error) {
         console.error('Error fetching translations for login:', error);

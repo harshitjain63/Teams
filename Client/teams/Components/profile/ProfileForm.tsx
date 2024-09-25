@@ -40,7 +40,7 @@ const ProfileForm = ({userDetails, navigation}: Props) => {
   console.log('>>><<<', userDetails.name);
   return (
     <View style={styles.container}>
-      <FormComponent val={id} label={'ID'} disabled={true} />
+      {/* <FormComponent val={id} label={'ID'} disabled={true} /> */}
       <FormComponent val={name} label={'Name'} disabled={true} />
       <FormComponent val={email} label={'Email'} disabled={true} />
       <FormComponent val={designation} label={'Designation'} disabled={true} />
