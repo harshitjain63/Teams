@@ -16,11 +16,14 @@ import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {RootStackParams} from '../Navigation/StackNavigator';
 import {useFocusEffect} from '@react-navigation/native';
 import {useAppSelector} from '../redux/hooks/customHook';
-import {fetchTranslations} from '../Components/languages/api';
 import {
-  getTranslations,
-  insertTranslations,
-} from '../Components/database/Database';
+  fetchEnglishTranslations,
+  fetchHindiTranslations,
+} from '../Components/languages/api';
+import {
+  fetchLoginTranslationsFromDB,
+  insertLoginTranslations,
+} from '../Components/database/DatabaseLogin';
 
 export type LoginProps = NativeStackScreenProps<RootStackParams, 'Login'>;
 
@@ -33,20 +36,32 @@ const Login = ({navigation, route}: LoginProps) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const storedTranslations = await getTranslations(
-          'login',
+        const translationsFromDB = await fetchLoginTranslationsFromDB(
           selectedLanguage,
         );
-        if (storedTranslations) {
-          setTranslations(storedTranslations);
-          console.log('Translations loaded from SQLite:', storedTranslations);
+
+        if (translationsFromDB) {
+          // If translations are found in the database
+          setTranslations(translationsFromDB);
         } else {
-          const data = await fetchTranslations('login', selectedLanguage);
-          if (data) {
-            setTranslations(data.texts);
-            await insertTranslations(data);
+          if (selectedLanguage === 'hi') {
+            const data = await fetchHindiTranslations();
+            if (data) {
+              setTranslations(data.auth.login);
+              // Insert the fetched translations into the database
+              await insertLoginTranslations(data.auth.login, selectedLanguage);
+            } else {
+              console.warn('Translations not found for the selected language');
+            }
           } else {
-            console.warn('Translations not found for the selected language');
+            const data = await fetchEnglishTranslations();
+            if (data) {
+              setTranslations(data.auth.login);
+              // Insert the fetched translations into the database
+              await insertLoginTranslations(data.auth.login, selectedLanguage);
+            } else {
+              console.warn('Translations not found for the selected language');
+            }
           }
         }
       } catch (error) {

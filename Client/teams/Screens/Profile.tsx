@@ -16,7 +16,7 @@ const Profile = ({navigation, route}: ProfileProps) => {
   useEffect(() => {
     dispatch(fetchDetails());
   }, [dispatch]);
-  console.log(userDetails);
+
   return (
     <View style={styles.container}>
       <ProfileHeader />

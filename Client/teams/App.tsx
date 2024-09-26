@@ -1,10 +1,14 @@
 import React, {useEffect} from 'react';
 import StackNavigator from './Navigation/StackNavigator';
-import {createTable} from './Components/database/Database';
+import {createLoginTable} from './Components/database/DatabaseLogin';
+import {createRegisterTable} from './Components/database/DatabaseRegister';
+import {createProfileTable} from './Components/database/DatabaseProfile';
 
 const App = () => {
   useEffect(() => {
-    createTable();
+    createLoginTable();
+    createRegisterTable();
+    createProfileTable();
   }, []);
   return <StackNavigator />;
 };

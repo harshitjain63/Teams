@@ -147,12 +147,12 @@ const FormLogin = ({navigation, translations}: FormLoginProps) => {
         }}
       />
       <Text style={styles.txt}>
-        Don't Have an Account?{' '}
+        {translations.dont_have_account}{' '}
         <Text
           onPress={() => navigation.navigate('Register')}
           style={styles.txt2}>
           {' '}
-          Register
+          {translations.register_button_text}
         </Text>
       </Text>
     </View>

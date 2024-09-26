@@ -7,7 +7,11 @@ import axiosInstance from '../../middleware/axiosConfig/axiosConfig';
 import {RegisterProp} from '../../Screens/Register';
 import {z} from 'zod';
 
-const Form = ({navigation}: RegisterProp) => {
+interface RegisterLoginProps extends RegisterProp {
+  translations: any; // Define the type for translations
+}
+
+const Form = ({navigation, translations}: RegisterLoginProps) => {
   const [email, setEmail] = useState<string>('');
   const [name, setName] = useState<string>('');
   const [password, setPassword] = useState<string>('');
@@ -97,7 +101,7 @@ const Form = ({navigation}: RegisterProp) => {
   return (
     <View style={styles.formContainer}>
       <TextInput
-        label={'Enter Your Name'}
+        label={translations.name_placeholder}
         value={name}
         onChangeText={setName}
         mode="outlined"
@@ -110,7 +114,7 @@ const Form = ({navigation}: RegisterProp) => {
         <Text style={styles.error}>{emailErrors}</Text>
       )}
       <TextInput
-        label={'Enter Your Email'}
+        label={translations.email_placeholder}
         value={email}
         onChangeText={setEmail}
         mode="outlined"
@@ -124,7 +128,7 @@ const Form = ({navigation}: RegisterProp) => {
       )}
       <TextInput
         secureTextEntry={!passwordShown}
-        label={'Enter Your Password'}
+        label={translations.password_placeholder}
         value={password}
         onChangeText={setPassword}
         mode="outlined"
@@ -143,17 +147,17 @@ const Form = ({navigation}: RegisterProp) => {
 
       {/* Register Button */}
       <Buttons
-        txt={'Register'}
+        txt={translations.submit_button_text}
         styles={styles.custom_button}
         onpress={() => {
           handleSubmit();
         }}
       />
       <Text style={styles.txt}>
-        Already Have an Account?{' '}
+        {translations.already_have_account}{' '}
         <Text onPress={() => navigation.navigate('Login')} style={styles.txt2}>
           {' '}
-          Login
+          {translations.login_button_text}
         </Text>
       </Text>
     </View>
