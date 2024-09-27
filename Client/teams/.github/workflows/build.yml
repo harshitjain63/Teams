@@ -11,12 +11,12 @@ jobs:
         run: uname -a
       - name: Cancel previous runs
         uses: styfle/cancel-workflow-action@0.9.1
-      - name: Checkout repo from main branch # Update this if needed
+      - name: Checkout repo from main branch
         uses: actions/checkout@v3
         with:
-          ref: main # Change this to match your branch
+          ref: main
       - name: Install npm dependency
-        run: npm install # Change from yarn to npm if needed
+        run: npm install
       - name: Setup Android SDK
         uses: android-actions/setup-android@v2
       - uses: actions/cache@v3
@@ -35,9 +35,9 @@ jobs:
           ./gradlew build
       - name: Build Android JS Bundle
         run: |
-          npm run package-android  # Change from yarn to npm if needed
+          npm run package-android
       - name: Delete Android build duplicate assets resource
-        run: npm run delete-pics # Change from yarn to npm if needed
+        run: npm run delete-pics
       - name: Install bundler
         run: |
           cd android
