@@ -22,7 +22,7 @@ const initialState: UserState = {
 export const fetchDetails = createAsyncThunk('user/fetchDetails', async () => {
   try {
     const response = await axiosInstance.get('/user/profile');
-    // console.log(response.data.data);
+    console.log('daaaaaaaaaaaaaaaaaaaa', response.data.data);
     return response.data.data;
   } catch (error) {
     return (error as any).message;

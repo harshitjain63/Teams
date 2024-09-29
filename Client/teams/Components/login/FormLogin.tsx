@@ -17,6 +17,7 @@ interface FormLoginProps extends LoginProps {
 }
 
 const FormLogin = ({navigation, translations}: FormLoginProps) => {
+  console.log('translations', translations);
   const {t} = useTranslation('auth');
   console.log('<<<<<<>>>>>>', t('password_placeholder'));
   const [email, setEmail] = useState<string>('');
@@ -86,13 +87,10 @@ const FormLogin = ({navigation, translations}: FormLoginProps) => {
       />
       <LoginIcons />
 
-      {/* Register Button */}
       <Buttons
-        txt={t('submit_button_text')}
+        txt={t('login_button_text')}
         styles={styles.custom_button}
-        onpress={() => {
-          postApiData();
-        }}
+        onpress={postApiData}
       />
       <Text style={styles.txt}>
         {t('dont_have_account')}{' '}

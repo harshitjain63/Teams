@@ -16,6 +16,7 @@ import {
   fetchHindiTranslations,
   fetchEnglishTranslations,
 } from '../languages/api';
+import {useTranslation} from 'react-i18next';
 
 type User = {
   userDetails: {
@@ -30,6 +31,7 @@ type Props = User & ProfileProps;
 
 const ProfileForm = ({userDetails, navigation}: Props) => {
   const dispatch = useAppDispatch();
+  const {t} = useTranslation('profile'); // Use the 'profile' namespace
 
   const [translations, setTranslations] = useState<any>({});
   const selectedLanguage = useAppSelector(
@@ -50,6 +52,7 @@ const ProfileForm = ({userDetails, navigation}: Props) => {
         } else {
           if (selectedLanguage === 'hi') {
             const data = await fetchHindiTranslations();
+            console.log('33333333333', data);
             if (data) {
               setTranslations(data.profile);
 
@@ -94,19 +97,15 @@ const ProfileForm = ({userDetails, navigation}: Props) => {
   return (
     <View style={styles.container}>
       {/* <FormComponent val={id} label={'ID'} disabled={true} /> */}
-      <FormComponent
-        val={name}
-        label={translations.name_placeholder}
-        disabled={true}
-      />
+      <FormComponent val={name} label={t('name_placeholder')} disabled={true} />
       <FormComponent
         val={email}
-        label={translations.email_placeholder}
+        label={t('email_placeholder')}
         disabled={true}
       />
       <FormComponent
         val={designation}
-        label={translations.designation_placeholder}
+        label={t('designation_placeholder')}
         disabled={true}
       />
 

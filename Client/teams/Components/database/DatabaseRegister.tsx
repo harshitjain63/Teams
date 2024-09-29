@@ -74,7 +74,7 @@ export const insertRegisterTranslations = async (
     );
     console.log('Registration translations inserted successfully');
   } catch (error) {
-    console.error('Error inserting translations:', error);
+    console.error('Error inserting translations for profile:', error);
   }
 };
 

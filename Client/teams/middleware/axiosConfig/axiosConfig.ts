@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const axiosInstance = axios.create({
-  baseURL: 'https://cjxiaojia.com/api',
+  baseURL: 'https://cjxiaojia.com/api/languages',
   headers: {
     Accept: 'application/json',
   },

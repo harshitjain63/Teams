@@ -51,8 +51,16 @@ const Profile = ({navigation, route}: ProfileProps) => {
   useEffect(() => {
     const storeData = async () => {
       try {
-        const serializedUserData = JSON.stringify(userDetails);
-        await AsyncStorage.setItem('user_data', serializedUserData);
+        // Only store new data if it's valid and different from the current state
+        if (
+          userDetails &&
+          userDetails.email &&
+          userDetails.email !== userData.email
+        ) {
+          const serializedUserData = JSON.stringify(userDetails);
+          await AsyncStorage.setItem('user_data', serializedUserData);
+          setUserData(userDetails); // Update local state to reflect new data
+        }
       } catch (err) {
         console.log((err as any).message);
       }
@@ -61,7 +69,7 @@ const Profile = ({navigation, route}: ProfileProps) => {
     if (userDetails && userDetails.email) {
       storeData();
     }
-  }, [userDetails]);
+  }, [userDetails, userData]);
 
   return (
     <View style={styles.container}>

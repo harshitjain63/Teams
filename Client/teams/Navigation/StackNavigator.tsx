@@ -57,6 +57,12 @@ const StackNavigator = () => {
           />
 
           <stack.Screen
+            options={{headerShown: true, headerBackVisible: true}}
+            name="Profile"
+            component={Profile}
+          />
+
+          <stack.Screen
             options={{headerShown: false}}
             name="OnBoarding"
             component={OnBoardingScreen}
@@ -68,11 +74,6 @@ const StackNavigator = () => {
             component={testing}
           />
 
-          <stack.Screen
-            options={{headerShown: true, headerBackVisible: true}}
-            name="Profile"
-            component={Profile}
-          />
           <stack.Screen
             options={{headerShown: false}}
             name="Chat"

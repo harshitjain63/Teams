@@ -6,12 +6,14 @@ import Buttons from '../Button';
 import axiosInstance from '../../middleware/axiosConfig/axiosConfig';
 import {RegisterProp} from '../../Screens/Register';
 import {z} from 'zod';
+import {useTranslation} from 'react-i18next';
 
 interface RegisterLoginProps extends RegisterProp {
   translations: any; // Define the type for translations
 }
 
 const Form = ({navigation, translations}: RegisterLoginProps) => {
+  const {t} = useTranslation('auth');
   const [email, setEmail] = useState<string>('');
   const [name, setName] = useState<string>('');
   const [password, setPassword] = useState<string>('');
@@ -101,7 +103,7 @@ const Form = ({navigation, translations}: RegisterLoginProps) => {
   return (
     <View style={styles.formContainer}>
       <TextInput
-        label={translations.name_placeholder}
+        label={t('name_placeholder')}
         value={name}
         onChangeText={setName}
         mode="outlined"
@@ -114,7 +116,7 @@ const Form = ({navigation, translations}: RegisterLoginProps) => {
         <Text style={styles.error}>{emailErrors}</Text>
       )}
       <TextInput
-        label={translations.email_placeholder}
+        label={t('email_placeholder')}
         value={email}
         onChangeText={setEmail}
         mode="outlined"
@@ -128,7 +130,7 @@ const Form = ({navigation, translations}: RegisterLoginProps) => {
       )}
       <TextInput
         secureTextEntry={!passwordShown}
-        label={translations.password_placeholder}
+        label={t('password_placeholder')}
         value={password}
         onChangeText={setPassword}
         mode="outlined"
@@ -147,17 +149,17 @@ const Form = ({navigation, translations}: RegisterLoginProps) => {
 
       {/* Register Button */}
       <Buttons
-        txt={translations.submit_button_text}
+        txt={t('submit_button_text')}
         styles={styles.custom_button}
         onpress={() => {
           handleSubmit();
         }}
       />
       <Text style={styles.txt}>
-        {translations.already_have_account}{' '}
+        {t('already_have_account')}{' '}
         <Text onPress={() => navigation.navigate('Login')} style={styles.txt2}>
           {' '}
-          {translations.login_button_text}
+          {t('login_button_text')}
         </Text>
       </Text>
     </View>
