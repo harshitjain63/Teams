@@ -22,6 +22,7 @@ import {
   fetchRegisterTranslationsFromDB,
   insertRegisterTranslations,
 } from '../Components/database/DatabaseRegister';
+import NetInfo from '@react-native-community/netinfo';
 
 export type RegisterProp = NativeStackScreenProps<RootStackParams, 'Register'>;
 
@@ -33,21 +34,19 @@ const Register = ({navigation, route}: RegisterProp) => {
 
   useEffect(() => {
     const fetchData = async () => {
+      const isConnected = await NetInfo.fetch().then(
+        (state: {isConnected: any}) => state.isConnected,
+      );
+
       try {
-        const translationsFromDB = await fetchRegisterTranslationsFromDB(
-          selectedLanguage,
-        );
-        if (translationsFromDB) {
-          // If translations are found in the database
-          setTranslations(translationsFromDB);
-        } else {
+        if (isConnected) {
           if (selectedLanguage === 'hi') {
             const data = await fetchHindiTranslations();
             if (data) {
-              setTranslations(data.auth.register);
-              // Insert the fetched translations into the database
+              setTranslations(data.onboarding.auth.register);
+
               await insertRegisterTranslations(
-                data.auth.register,
+                data.onboarding.auth.register,
                 selectedLanguage,
               );
             } else {
@@ -56,19 +55,31 @@ const Register = ({navigation, route}: RegisterProp) => {
           } else {
             const data = await fetchEnglishTranslations();
             if (data) {
-              setTranslations(data.auth.register);
-              // Insert the fetched translations into the database
+              setTranslations(data.onboarding.auth.register);
+
               await insertRegisterTranslations(
-                data.auth.register,
+                data.onboarding.auth.register,
                 selectedLanguage,
               );
             } else {
               console.warn('Translations not found for the selected language');
             }
           }
+        } else {
+          const translationsFromDB = await fetchRegisterTranslationsFromDB(
+            selectedLanguage,
+          );
+
+          if (translationsFromDB) {
+            setTranslations(translationsFromDB);
+          } else {
+            console.warn(
+              'Translations not found for the selected language in local database',
+            );
+          }
         }
       } catch (error) {
-        console.error('Error fetching translations for register:', error);
+        console.error('Error fetching translations for login:', error);
       }
     };
     fetchData();

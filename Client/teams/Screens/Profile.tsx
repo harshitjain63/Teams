@@ -37,7 +37,6 @@ const Profile = ({navigation, route}: ProfileProps) => {
           const usersData = JSON.parse(value);
           setUserData(usersData);
         } else {
-          // If no data in AsyncStorage, fetch details
           dispatch(fetchDetails());
         }
       } catch (err) {
@@ -51,8 +50,15 @@ const Profile = ({navigation, route}: ProfileProps) => {
   useEffect(() => {
     const storeData = async () => {
       try {
-        const serializedUserData = JSON.stringify(userDetails);
-        await AsyncStorage.setItem('user_data', serializedUserData);
+        if (
+          userDetails &&
+          userDetails.email &&
+          userDetails.email !== userData.email
+        ) {
+          const serializedUserData = JSON.stringify(userDetails);
+          await AsyncStorage.setItem('user_data', serializedUserData);
+          setUserData(userDetails);
+        }
       } catch (err) {
         console.log((err as any).message);
       }
@@ -61,7 +67,7 @@ const Profile = ({navigation, route}: ProfileProps) => {
     if (userDetails && userDetails.email) {
       storeData();
     }
-  }, [userDetails]);
+  }, [userDetails, userData]);
 
   return (
     <View style={styles.container}>

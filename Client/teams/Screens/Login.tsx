@@ -24,6 +24,7 @@ import {
   fetchLoginTranslationsFromDB,
   insertLoginTranslations,
 } from '../Components/database/DatabaseLogin';
+import NetInfo from '@react-native-community/netinfo';
 
 export type LoginProps = NativeStackScreenProps<RootStackParams, 'Login'>;
 
@@ -35,38 +36,55 @@ const Login = ({navigation, route}: LoginProps) => {
 
   useEffect(() => {
     const fetchData = async () => {
-      try {
-        const translationsFromDB = await fetchLoginTranslationsFromDB(
-          selectedLanguage,
-        );
+      const isConnected = await NetInfo.fetch().then(
+        (state: {isConnected: any}) => state.isConnected,
+      );
 
-        if (translationsFromDB) {
-          // If translations are found in the database
-          setTranslations(translationsFromDB);
-        } else {
+      try {
+        if (isConnected) {
           if (selectedLanguage === 'hi') {
             const data = await fetchHindiTranslations();
             if (data) {
-              setTranslations(data.auth.login);
-              // Insert the fetched translations into the database
-              await insertLoginTranslations(data.auth.login, selectedLanguage);
+              setTranslations(data.onboarding.auth.login);
+
+              await insertLoginTranslations(
+                data.onboarding.auth.login,
+                selectedLanguage,
+              );
             } else {
               console.warn('Translations not found for the selected language');
             }
           } else {
             const data = await fetchEnglishTranslations();
             if (data) {
-              setTranslations(data.auth.login);
-              // Insert the fetched translations into the database
-              await insertLoginTranslations(data.auth.login, selectedLanguage);
+              setTranslations(data.onboarding.auth.login);
+
+              await insertLoginTranslations(
+                data.onboarding.auth.login,
+                selectedLanguage,
+              );
             } else {
               console.warn('Translations not found for the selected language');
             }
+          }
+        } else {
+          const translationsFromDB = await fetchLoginTranslationsFromDB(
+            selectedLanguage,
+          );
+
+          if (translationsFromDB) {
+            setTranslations(translationsFromDB);
+          } else {
+            console.warn(
+              'Translations not found for the selected language in local database',
+            );
           }
         }
       } catch (error) {
         console.error('Error fetching translations for login:', error);
       }
+
+      //////////
     };
     fetchData();
   }, [selectedLanguage]);

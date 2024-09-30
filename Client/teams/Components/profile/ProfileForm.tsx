@@ -16,6 +16,7 @@ import {
   fetchHindiTranslations,
   fetchEnglishTranslations,
 } from '../languages/api';
+import NetInfo from '@react-native-community/netinfo';
 
 type User = {
   userDetails: {
@@ -39,21 +40,15 @@ const ProfileForm = ({userDetails, navigation}: Props) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const translationsFromDB = await fetchProfileTranslationsFromDB(
-          selectedLanguage,
+        const isConnected = await NetInfo.fetch().then(
+          (state: {isConnected: any}) => state.isConnected,
         );
-        console.log('-------', translationsFromDB);
 
-        if (translationsFromDB) {
-          // If translations are found in the database
-          setTranslations(translationsFromDB);
-        } else {
+        if (isConnected) {
           if (selectedLanguage === 'hi') {
             const data = await fetchHindiTranslations();
             if (data) {
               setTranslations(data.profile);
-
-              // Insert the fetched translations into the database
               await insertProfileTranslations(data.profile, selectedLanguage);
             } else {
               console.warn('Translations not found for the selected language');
@@ -62,11 +57,17 @@ const ProfileForm = ({userDetails, navigation}: Props) => {
             const data = await fetchEnglishTranslations();
             if (data) {
               setTranslations(data.profile);
-              // Insert the fetched translations into the database
               await insertProfileTranslations(data.profile, selectedLanguage);
             } else {
               console.warn('Translations not found for the selected language');
             }
+          }
+        } else {
+          const translationsFromDB = await fetchProfileTranslationsFromDB(
+            selectedLanguage,
+          );
+          if (translationsFromDB) {
+            setTranslations(translationsFromDB);
           }
         }
       } catch (error) {
