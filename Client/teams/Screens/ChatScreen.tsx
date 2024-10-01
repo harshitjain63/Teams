@@ -25,15 +25,46 @@ const ChatScreen = ({route}: MeetingProps) => {
   const [message, setMessage] = useState<ItemData[]>([]);
   const [reciever_Id, setReciever_Id] = useState('');
 
+  const {flag, group_id} = route.params;
+
+  console.log('group_id', group_id);
+  console.log('recieverid', reciever_Id);
+
   useEffect(() => {
     if (route.params?.reciever_Id) {
       setReciever_Id(route.params.reciever_Id);
       console.log('reciever id------', reciever_Id);
     }
-  }, [reciever_Id, route.params.reciever_Id]);
+  }, [reciever_Id, route.params?.reciever_Id]);
 
   const getMessageData = async () => {
     try {
+      if (flag === 'group') {
+        const profile = await axiosInstance.get(`/group/${group_id}/messages`);
+        const values = profile.data.data.data;
+        console.log(profile.data, '');
+        console.log('values', values);
+
+        if (values) {
+          const msgData = values.map(
+            (item: {message: string; user_id: string; created_at: string}) => ({
+              message: item.message,
+              id: item.user_id === id ? 1 : 2, // 1 for current user (sender), 2 for receiver
+              timestamp: item.created_at,
+            }),
+          );
+
+          msgData.sort(
+            (
+              a: {timestamp: string | number | Date},
+              b: {timestamp: string | number | Date},
+            ) =>
+              new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime(),
+          );
+
+          setMessage(msgData);
+        }
+      }
       const profile = await axiosInstance.get('/user/profile');
       const id = profile.data.data.id;
       const response = await axiosInstance.get(`/message/${reciever_Id}`);
@@ -99,7 +130,11 @@ const ChatScreen = ({route}: MeetingProps) => {
           renderItem={renderItem}
         />
       ) : null}
-      <SendMessage setMessage={setMessage} reciever_Id={reciever_Id} />
+      <SendMessage
+        setMessage={setMessage}
+        reciever_Id={reciever_Id}
+        flag={flag}
+      />
     </SafeAreaView>
   );
 };

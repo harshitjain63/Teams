@@ -24,15 +24,19 @@ const MeetingScreen = ({navigation, route}: MeetingProps) => {
   const showModal = () => {
     navigation.navigate('Search_Modal');
   };
+
   return (
     <View style={styles.container}>
       <TextInputWrapper reciever_id={reciever_Id} />
       <Button
         style={styles.button}
         textColor="#FFF"
-        onPress={() => navigation.navigate('Chat')}>
+        onPress={() =>
+          navigation.navigate('Chat', {flag: 'ind', reciever_Id: reciever_Id})
+        }>
         Start Meeting
       </Button>
+
       <AnimatedFAB
         label="Add Receiver"
         icon={'plus'}

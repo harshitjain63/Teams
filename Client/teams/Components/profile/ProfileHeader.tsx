@@ -7,7 +7,6 @@ import {
 } from 'react-native-image-picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axiosInstance from '../../middleware/axiosConfig/axiosConfig';
-import {readFile} from 'react-native-fs';
 
 const ProfileHeader = () => {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);

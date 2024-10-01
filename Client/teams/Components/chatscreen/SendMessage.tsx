@@ -12,9 +12,11 @@ import axiosInstance from '../../middleware/axiosConfig/axiosConfig';
 const SendMessage = ({
   setMessage,
   reciever_Id,
+  flag,
 }: {
   setMessage: React.Dispatch<React.SetStateAction<string[]>>;
   reciever_Id: string;
+  flag: string;
 }) => {
   const [messageValue, setMessageValue] = useState('');
   const handleclick = () => {
@@ -27,6 +29,14 @@ const SendMessage = ({
     console.log(reciever_Id);
 
     try {
+      if (flag === 'group') {
+        const response = await axiosInstance.post('/group/addMessage', {
+          message: messageValue,
+          receiver_id: reciever_Id,
+          type: flag,
+        });
+        console.log(response.data, 'group');
+      }
       const response = await axiosInstance.post('/message/create', {
         message: messageValue,
         receiver_id: reciever_Id,
