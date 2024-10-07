@@ -49,7 +49,7 @@ const ChatScreen = ({route}: MeetingProps) => {
           const msgData = values.map(
             (item: {message: string; user_id: string; created_at: string}) => ({
               message: item.message,
-              id: item.user_id === id ? 1 : 2, // 1 for current user (sender), 2 for receiver
+              id: item.user_id === id ? 1 : 2,
               timestamp: item.created_at,
             }),
           );

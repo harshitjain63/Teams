@@ -1,0 +1,24 @@
+{
+  "name": "teams",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prepare": "husky install",
+    "lint": "cd Client/teams && eslint .",
+    "lint:fix": "cd Client/teams && eslint . --fix",
+    "format": "cd Client/teams && prettier --write .",
+    "commit": "commit"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "@commitlint/cli": "^19.5.0",
+    "@commitlint/config-conventional": "^19.5.0",
+    "eslint": "^8.57.1",
+    "husky": "^8.0.0",
+    "prettier": "^3.3.3"
+  }
+}

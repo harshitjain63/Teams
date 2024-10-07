@@ -68,9 +68,8 @@ const Login = ({navigation, route}: LoginProps) => {
             }
           }
         } else {
-          const translationsFromDB = await fetchLoginTranslationsFromDB(
-            selectedLanguage,
-          );
+          const translationsFromDB =
+            await fetchLoginTranslationsFromDB(selectedLanguage);
 
           if (translationsFromDB) {
             setTranslations(translationsFromDB);

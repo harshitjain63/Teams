@@ -66,9 +66,8 @@ const Register = ({navigation, route}: RegisterProp) => {
             }
           }
         } else {
-          const translationsFromDB = await fetchRegisterTranslationsFromDB(
-            selectedLanguage,
-          );
+          const translationsFromDB =
+            await fetchRegisterTranslationsFromDB(selectedLanguage);
 
           if (translationsFromDB) {
             setTranslations(translationsFromDB);

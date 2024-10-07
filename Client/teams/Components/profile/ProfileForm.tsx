@@ -63,9 +63,8 @@ const ProfileForm = ({userDetails, navigation}: Props) => {
             }
           }
         } else {
-          const translationsFromDB = await fetchProfileTranslationsFromDB(
-            selectedLanguage,
-          );
+          const translationsFromDB =
+            await fetchProfileTranslationsFromDB(selectedLanguage);
           if (translationsFromDB) {
             setTranslations(translationsFromDB);
           }
